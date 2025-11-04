@@ -11,7 +11,7 @@ pipeline {
 				echo "Setup environment"
 				sh '''
 					
-					echo "${env.CI_REPOSITORY_TOKEN}" | docker login -u "${env.CI_REPOSITORY_USER}" --password-stdin
+					echo "$CI_REPOSITORY_TOKEN" | docker login -u "$CI_REPOSITORY_USER" --password-stdin
 				'''
 			}
 		}
