@@ -2,6 +2,14 @@ pipeline {
     agent any
 
 	stages {
+		stage('setup') {
+			steps {
+				echo "Setup environment"
+				sh '''
+					echo $CI_REPOSITORY_TOKEN | docker login -u $CI_REPOSITORY_USER --password-stdin
+				'''
+			}
+		}
 		stage('checkout') {
 			steps {
 				echo "Checkout SCM"
@@ -10,21 +18,19 @@ pipeline {
 		}
 		stage('build') {
 			steps {
-				echo 'Testing..'
-				sh '''
-					npm install
-					npm test
-				'''
+				echo 'Installing deps...'
+				sh 'npm install'
 			}
 		}
 		stage('test') {
 			steps {
-				echo 'Deploying....'
+				echo 'Running tests....'
+				sh 'npm test'
 			}
 		}
 		stage('build_docker') {
 			steps {
-				echo 'Deploying....'
+				echo 'Building....'
 			}
 		}
 		stage('deploy') {
