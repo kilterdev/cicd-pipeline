@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    	agent any
+    	environment {
+    		CI_REPOSITORY_TOKEN=credentials("CI_REPOSITORY_TOKEN")
+		CI_REPO	SITORY_USER=credentials("CI_REPOSITORY_USER")
+	}
 
 	stages {
 		stage('setup') {
