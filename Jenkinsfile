@@ -2,7 +2,7 @@ pipeline {
     	agent any
     	environment {
     		CI_REPOSITORY_TOKEN=credentials("CI_REPOSITORY_TOKEN")
-		CI_REPO	SITORY_USER=credentials("CI_REPOSITORY_USER")
+		CI_REPOSITORY_USER=credentials("CI_REPOSITORY_USER")
 	}
 
 	stages {
@@ -10,7 +10,8 @@ pipeline {
 			steps {
 				echo "Setup environment"
 				sh '''
-					echo $CI_REPOSITORY_TOKEN | docker login -u $CI_REPOSITORY_USER --password-stdin
+					
+					echo "${env.CI_REPOSITORY_TOKEN}" | docker login -u "${env.CI_REPOSITORY_USER}" --password-stdin
 				'''
 			}
 		}
