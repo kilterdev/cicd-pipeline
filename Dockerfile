@@ -1,4 +1,4 @@
-FROM --platform=linux/arm64 node:trixie
+FROM node:trixie
 WORKDIR /opt
 ADD . /opt
 RUN npm install
