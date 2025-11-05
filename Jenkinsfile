@@ -2,8 +2,9 @@ pipeline {
     	agent any
     	environment {
     		CI_REPOSITORY_TOKEN=credentials("CI_REPOSITORY_TOKEN")
-		CI_REPOSITORY_USER=credentials("CI_REPOSITORY_USER")
-	}
+			CI_REPOSITORY_USER=credentials("CI_REPOSITORY_USER")
+			IMAGE_TAG="$CI_REPOSITORY/$CI_REPOSITORY_NAMESPACE/$CI_IMAGE_NAME:$CI_IMAGE_TAG"
+		}
 
 	stages {
 		stage('setup') {
@@ -35,7 +36,13 @@ pipeline {
 		}
 		stage('build_docker') {
 			steps {
+				environment {
+				}
 				echo 'Building....'
+				sh '''
+					docker build . -t $IMAGE_TAG
+					docker push $IMAGE_TAG
+				'''
 			}
 		}
 		stage('deploy') {
