@@ -36,8 +36,6 @@ pipeline {
 		}
 		stage('build_docker') {
 			steps {
-				environment {
-				}
 				echo 'Building....'
 				sh '''
 					docker build . -t $IMAGE_TAG
