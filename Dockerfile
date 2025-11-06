@@ -4,4 +4,4 @@ ADD . /opt
 RUN npm install
 
 CMD ["run", "start"]
-ENTRYPOINT npm
+ENTRYPOINT ["npm"]
