@@ -1,7 +1,6 @@
 pipeline {
 	options {
-		skipDefaultCheckout(true)
-	}
+		skipDefaultCheckout(true) }
 	agent any
 	environment {
 		CI_REPOSITORY=credentials("CI_REPOSITORY")
@@ -65,6 +64,7 @@ pipeline {
 				echo 'Deploying....'
 				sh '''
 					docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested
+					sleep 10s
 					curl localhost:$TEST_PORT
 				'''
 			}
