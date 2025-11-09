@@ -10,11 +10,17 @@ pipeline {
 		CI_IMAGE_TAG="v1.0"
 		CI_REPOSITORY_TOKEN=credentials("CI_REPOSITORY_TOKEN")
 		CI_REPOSITORY_USER=credentials("CI_REPOSITORY_USER")
-		IMAGE_TAG="$CI_REPOSITORY/$CI_REPOSITORY_NAMESPACE/$CI_IMAGE_NAME:$CI_IMAGE_TAG"
+
+		IMAGE_NAME="$CI_REPOSITORY/$CI_REPOSITORY_NAMESPACE/$CI_IMAGE_NAME"
+		IMAGE_TAG="$IMAGE_FULL_NAME:$CI_IMAGE_TAG"
+
+		TEST_PORT=9005
+		HOST_PORT=3000
+		CONTAINER_PORT=3000
 	}
 
 	stages {
-		stage('setup') {
+		stage('Setup Environment') {
 			steps {
 				echo "Setup environment"
 				sh '''
@@ -23,37 +29,62 @@ pipeline {
 				'''
 			}
 		}
-		stage('checkout') {
+
+		stage('Checkout') {
 			steps {
 				echo "Checkout SCM"
 				checkout scm
 			}
 		}
-		stage('build') {
+
+		stage('Build App') {
 			steps {
 				echo 'Installing deps...'
 				sh 'npm install'
 			}
 		}
-		stage('test') {
+
+		stage('Test App') {
 			steps {
 				echo 'Running tests....'
 				sh 'npm test'
 			}
 		}
-		stage('build_docker') {
+
+		stage('Build Image') {
 			steps {
 				echo 'Building....'
 				sh '''
-					docker build . -t $IMAGE_TAG
-					docker push $IMAGE_TAG
+					docker build . -t $IMAGE_NAME:tested
 				'''
 			}
 		}
-		stage('deploy') {
+
+		stage('Test Container') {
 			steps {
 				echo 'Deploying....'
+				sh '''
+					docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested
+					curl localhost:$TEST_PORT
+				'''
 			}
+		}
+
+		stage('Deploy Container') {
+			steps {
+				sh '''
+					docker rmi $IMAGE_NAME:latest
+					docker tag $IMAGE_NAME:tested $IMAGE_TAG
+					docker tag $IMAGE_NAME:tested $IMAGE_NAME:latest
+
+					docker stop $(docker ps -q --filter ancestor=$IMAGE_NAME:latest)
+					docker run -p $HOST_PORT:$CONTAINER_PORT $IMAGE_NAME:latest
+				'''
+			}
+		}
+
+		stage('Deploy to K8S') {
+			echo "Deploying to K8S"
 		}
 	}
 }
