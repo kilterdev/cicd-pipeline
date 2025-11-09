@@ -84,7 +84,9 @@ pipeline {
 		}
 
 		stage('Deploy to K8S') {
-			echo "Deploying to K8S"
+			steps {
+				echo "Deploying to K8S"
+			}
 		}
 	}
 }
