@@ -62,8 +62,7 @@ pipeline {
 		stage('Test Container') {
 			steps {
 				echo 'Testing....'
-				sh '''
-					docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested
+				sh ''' docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested
 					sleep 10s
 #[ $( docker container inspect -f '{{.State.Status}}' $IMAGE_NAME:tested)" = "running" ]
 
@@ -83,6 +82,8 @@ pipeline {
 					docker push $CI_REPOSITORY/$IMAGE_TAGGED_NAME
 					docker push $CI_REPOSITORY/$IMAGE_NAME:latest
 				'''
+			}
+		}
 
 		stage('Deploy Container') {
 			steps {
