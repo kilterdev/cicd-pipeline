@@ -65,7 +65,10 @@ pipeline {
 				sh '''
 					docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested
 					sleep 10s
+#[ $( docker container inspect -f '{{.State.Status}}' $IMAGE_NAME:tested)" = "running" ]
+
 					curl localhost:$TEST_PORT
+					docker stop $(docker ps -q --filter ancestor=$IMAGE_NAME:tested)
 				'''
 			}
 		}
