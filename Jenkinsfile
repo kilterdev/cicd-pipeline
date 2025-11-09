@@ -73,7 +73,7 @@ pipeline {
 		}
 
 		stage('Push') {
-			stages {
+			steps {
 				sh '''
 					docker rmi $IMAGE_NAME:latest || echo
 					docker tag $IMAGE_NAME:tested $IMAGE_TAGGED_NAME
