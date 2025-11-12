@@ -1,4 +1,4 @@
-def getEnvName(branchName) {
+def getEnvPort(branchName) {
     if("dev".equals(branchName)) {
         return 3001;
     } else if ("main".equals(branchName)) {
