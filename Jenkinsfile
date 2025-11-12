@@ -2,7 +2,7 @@ def getEnvPort(branchName) {
     if("dev".equals(branchName)) {
         return 3001;
     } else if ("main".equals(branchName)) {
-        return "dev";
+        return 3000;
     }
 }
 
