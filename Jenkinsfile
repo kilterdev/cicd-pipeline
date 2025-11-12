@@ -1,9 +1,7 @@
 def getEnvName(branchName) {
-    if("int".equals(branchName)) {
-        return "int";
-    } else if ("production".equals(branchName)) {
-        return "prod";
-    } else {
+    if("dev".equals(branchName)) {
+        return 3001;
+    } else if ("main".equals(branchName)) {
         return "dev";
     }
 }
@@ -25,7 +23,7 @@ pipeline {
 
 		TEST_PORT=9005
 
-		[ "${env.BRANCH_NAME}" = "dev" ] && HOST_PORT=3001 || HOST_PORT=3000
+		HOST_PORT=getEnvPort(env.BRANCH_NAME)
 		CONTAINER_PORT=3000
 	}
 
