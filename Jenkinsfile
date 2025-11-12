@@ -76,18 +76,18 @@ pipeline {
 
 		stage('Push') {
 			steps {
+				// Remove latest tag that is currently running as a container
+				// and tag tested image as latest
+				// Push tested version to repository
+				// Remove all local images
 				sh '''
-					// Remove latest tag that is currently running as a container
-					// and tag tested image as latest
 					docker rmi $IMAGE_NAME:latest || echo
 					docker tag $IMAGE_NAME:tested $IMAGE_TAGGED_NAME
 					docker tag $IMAGE_NAME:tested $IMAGE_NAME:latest
 
-					// Push tested version to repository
 					docker push $CI_REPOSITORY/$IMAGE_TAGGED_NAME
 					docker push $CI_REPOSITORY/$IMAGE_NAME:latest
 
-					// Remove all local images
 					docker rmi $IMAGE_NAME || echo
 				'''
 			}
