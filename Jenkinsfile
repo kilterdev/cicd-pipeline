@@ -106,7 +106,9 @@ pipeline {
 			steps {
 				sh '''
 					docker pull $CI_REPOSITORY/$IMAGE_NAME:latest
-					docker stop $(docker ps -q --filter ancestor=$IMAGE_NAME:latest) || echo
+					
+					docker stop $(docker ps --filter "publish=$HOST_PORT" --format "{{.ID}}") || echo ""
+#docker stop $(docker ps -q --filter ancestor=$IMAGE_NAME:latest) || echo
 					docker run -d -p $HOST_PORT:$CONTAINER_PORT $IMAGE_NAME:latest
 				'''
 			}
