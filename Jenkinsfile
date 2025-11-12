@@ -62,7 +62,9 @@ pipeline {
 		stage('Test Container') {
 			steps {
 				echo 'Testing....'
-				sh ''' docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested
+				sh '''
+				docker stop $(docker ps --filter "publish=$TEST_PORT" --format "{{.ID}}") || echo ""
+				docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested
 					sleep 10s
 #[ $( docker container inspect -f '{{.State.Status}}' $IMAGE_NAME:tested)" = "running" ]
 
@@ -75,12 +77,18 @@ pipeline {
 		stage('Push') {
 			steps {
 				sh '''
+					// Remove latest tag that is currently running as a container
+					// and tag tested image as latest
 					docker rmi $IMAGE_NAME:latest || echo
 					docker tag $IMAGE_NAME:tested $IMAGE_TAGGED_NAME
 					docker tag $IMAGE_NAME:tested $IMAGE_NAME:latest
 
+					// Push tested version to repository
 					docker push $CI_REPOSITORY/$IMAGE_TAGGED_NAME
 					docker push $CI_REPOSITORY/$IMAGE_NAME:latest
+
+					// Remove all local images
+					docker rmi $IMAGE_NAME || echo
 				'''
 			}
 		}
