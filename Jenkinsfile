@@ -98,7 +98,7 @@ pipeline {
 				sh '''
 					docker pull $CI_REPOSITORY/$IMAGE_NAME:latest
 					docker stop $(docker ps -q --filter ancestor=$IMAGE_NAME:latest) || echo
-					docker run -p $HOST_PORT:$CONTAINER_PORT $IMAGE_NAME:latest
+					docker run -d -p $HOST_PORT:$CONTAINER_PORT $IMAGE_NAME:latest
 				'''
 			}
 		}
