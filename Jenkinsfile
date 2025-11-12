@@ -1,3 +1,13 @@
+def getEnvName(branchName) {
+    if("int".equals(branchName)) {
+        return "int";
+    } else if ("production".equals(branchName)) {
+        return "prod";
+    } else {
+        return "dev";
+    }
+}
+
 pipeline {
 	options {
 		skipDefaultCheckout(true) }
