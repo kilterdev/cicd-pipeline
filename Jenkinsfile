@@ -58,6 +58,22 @@ pipeline {
 				sh 'npm test'
 			}
 		}
+		
+		stage('Docker Lint') {
+			agent {
+				docker {
+					image 'hadolint/hadolint:latest-debian'
+				}
+			}
+			steps {
+				sh 'hadolint Dockerfile | tee -a hadolint_lint.txt'
+			}
+			post {
+				always {
+					archiveArtifacts 'hadolint_lint.txt'
+				}
+			}
+		}
 
 		stage('Build Image') {
 			steps {
