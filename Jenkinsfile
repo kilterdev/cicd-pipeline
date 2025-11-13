@@ -79,7 +79,7 @@ pipeline {
 			steps {
 				echo 'Building....'
 				sh '''
-					docker build . -t $IMAGE_NAME:tested
+					docker build . --no-cache -t $IMAGE_NAME:tested
 				'''
 			}
 		}
