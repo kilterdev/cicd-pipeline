@@ -10,7 +10,8 @@ def getEnvPort(branchName) {
 
 pipeline {
 	options {
-		skipDefaultCheckout(true) }
+		skipDefaultCheckout(true)
+	}
 	agent any
 	environment {
 		CI_REPOSITORY=credentials("CI_REPOSITORY")
@@ -30,13 +31,6 @@ pipeline {
 	}
 
 	stages {
-		stage('Use Shared Library') {
-			steps {
-				sh '''
-					helloWorld(dayOfWeek: "Thursday", name: "kilterdev")
-				'''
-			}
-		}
 
 		stage('Setup Environment') {
 			steps {
