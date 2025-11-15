@@ -77,11 +77,13 @@ pipeline {
 				}
 			}
 			steps {
-				sh 'hadolint Dockerfile a hadolint_lint.txt'
+				sh '''
+					hadolint Dockerfile a hadolint_lint.txt && echo hadolint_lint.txt
+				'''
 			}
 			post {
 				always {
-					archiveArtifacts > 'hadolint_lint.txt' && echo hadolint_lint.txt
+					archiveArtifacts > 'hadolint_lint.txt'
 				}
 			}
 		}
