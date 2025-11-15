@@ -83,7 +83,7 @@ pipeline {
 			}
 			post {
 				always {
-					archiveArtifacts > 'hadolint_lint.txt'
+					archiveArtifacts 'hadolint_lint.txt'
 				}
 			}
 		}
