@@ -34,7 +34,7 @@ pipeline {
 		stage('Use library') {
 			steps {
 				sh '''
-					helloWorld(dayOfWeek: "Thu", name: "kilterdev")
+					helloWorld(dayOfWeek:"Thu",name:"kilterdev")
 				'''
 			}
 		}
