@@ -1,3 +1,4 @@
+@Library('jenkinslib') _
 
 def getEnvPort(branchName) {
     if("dev".equals(branchName)) {
@@ -30,6 +31,13 @@ pipeline {
 	}
 
 	stages {
+		stage('Use library') {
+			steps {
+				sh '''
+					helloWorld(dayOfWeek: "Thu", name: "kilterdev")
+				'''
+			}
+		}
 
 		stage('Setup Environment') {
 			steps {
