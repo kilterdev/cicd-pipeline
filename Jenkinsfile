@@ -1,3 +1,5 @@
+@Library('jenkinslib') _
+
 def getEnvPort(branchName) {
     if("dev".equals(branchName)) {
         return 3001;
@@ -28,6 +30,14 @@ pipeline {
 	}
 
 	stages {
+		stage('Use Shared Library') {
+			steps {
+				sh '''
+					helloWorld(dayOfWeek: "Thursday", name: "kilterdev")
+				'''
+			}
+		}
+
 		stage('Setup Environment') {
 			steps {
 				echo "Setup environment"
@@ -81,6 +91,20 @@ pipeline {
 				sh '''
 					docker build . --no-cache -t $IMAGE_NAME:tested
 				'''
+			}
+		}
+
+		stage('Scan Vulnerabilities') {
+			agents {
+				docker {
+					image 'aquasec/trivy:latest'
+				}
+			}
+			steps {
+				script {
+					def trivyOutput = sh(script: "trivy image $IMAGE_NAME:tested", returnStdout: true).trim()
+					println trivyOutput
+				}
 			}
 		}
 
