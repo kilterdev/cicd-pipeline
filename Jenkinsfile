@@ -78,7 +78,7 @@ pipeline {
 			}
 			steps {
 				sh '''
-					hadolint Dockerfile hadolint_lint.txt && echo hadolint_lint.txt
+					hadolint Dockerfile > hadolint_lint.txt && echo hadolint_lint.txt
 				'''
 			}
 			post {
