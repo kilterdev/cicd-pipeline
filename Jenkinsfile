@@ -1,4 +1,3 @@
-@Library('jenkinslib') _
 
 def getEnvPort(branchName) {
     if("dev".equals(branchName)) {
