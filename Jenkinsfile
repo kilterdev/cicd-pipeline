@@ -103,7 +103,7 @@ pipeline {
 			}
 			steps {
 				script {
-					def trivyOutput = sh(script: "trivy image --offline-scan --severity HIGH,CRITICAL $IMAGE_NAME:tested", returnStdout: true).trim()
+					def trivyOutput = sh(script: "trivy image --db-repository public.ecr.aws/aquasecurity/trivy-db:2 --offline-scan --severity HIGH,CRITICAL $IMAGE_NAME:tested", returnStdout: true).trim()
 					println trivyOutput
 				}
 			}
