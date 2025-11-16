@@ -77,10 +77,10 @@ pipeline {
 			}
 			steps {
 				sh '''
-					echo $SHELL
-					set -o pipefail
-					hadolint Dockerfile | tee hadolint.txt
-					set +o pipefail
+					result=$(hadolint Dockerfile)
+					STATUS=$?
+					echo -n $result > hadolint.txt
+					exit $STATUS
 				'''
 			}
 			post {
