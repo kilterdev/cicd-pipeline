@@ -98,7 +98,7 @@ pipeline {
 		stage('Scan Vulnerabilities') {
 			agent {
 				docker {
-					image 'aquasec/trivy:latest'
+					image 'aquasec/trivy:canary'
 				}
 			}
 			steps {
