@@ -77,10 +77,8 @@ pipeline {
 			}
 			steps {
 				sh '''
-					result=$(hadolint Dockerfile 2>&1)
-					status=$?
-					echo $result > hadolint.txt
-					exit $status
+					echo $SHELL
+					hadolint Dockerfile | tee hadolint.txt
 				'''
 			}
 			post {
