@@ -77,8 +77,8 @@ pipeline {
 			}
 			steps {
 				sh '''
-					ls
-					EERNO=$(hadolint < Dockerfile | tee -a hadolint_lint.txt)
+					hadolint Dockerfile > hadolint_lint.txt
+					ERRNO=$?
 					cat hadolint_lint.txt
 					echo $ERRNO
 					exit $ERRNO
