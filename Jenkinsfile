@@ -77,6 +77,7 @@ pipeline {
 			}
 			steps {
 				sh '''
+					cat Dockerfile
 					hadolint Dockerfile | tee hadolint.txt
 				'''
 			}
