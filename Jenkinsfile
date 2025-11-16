@@ -77,12 +77,15 @@ pipeline {
 			}
 			steps {
 				sh '''
-					hadolint Dockerfile | tee hadolint_lint.txt; exit ${PIPESTATUS[0]}
+					result=$(hadolint Dockerfile 2>&1)
+					status=$?
+					echo $result > hadolint.txt
+					exit $status
 				'''
 			}
 			post {
 				always {
-					archiveArtifacts 'hadolint_lint.txt'
+					archiveArtifacts 'hadolint.txt'
 				}
 			}
 		}
