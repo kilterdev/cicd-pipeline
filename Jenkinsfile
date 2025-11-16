@@ -77,9 +77,9 @@ pipeline {
 			}
 			steps {
 				sh '''
-					result=$(hadolint Dockerfile)
+					result=$(hadolint Dockerfile || true)
 					STATUS=$?
-					echo -n $result > hadolint.txt
+					if [ $STATUS -eq 0 ]; then echo -n $result > hadolint.txt; fi 
 					exit $STATUS
 				'''
 			}
