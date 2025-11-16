@@ -1,5 +1,6 @@
 FROM node:20.19.5
-WORKDIR /opt
+#WORKDIR /opt
+WORKDIR usr/src/app
 ADD . /opt
 RUN npm install
 
