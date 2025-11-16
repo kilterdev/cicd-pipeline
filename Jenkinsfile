@@ -78,7 +78,9 @@ pipeline {
 			steps {
 				sh '''
 					echo $SHELL
+					set -o pipefail
 					hadolint Dockerfile | tee hadolint.txt
+					set +o pipefail
 				'''
 			}
 			post {
