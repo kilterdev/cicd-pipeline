@@ -77,11 +77,9 @@ pipeline {
 			}
 			steps {
 				sh '''
-					hadolint Dockerfile > hadolint_lint.txt
-					ERRNO=$?
+					ERR=$(hadolint Dockerfile > hadolint_lint.txt)
 					cat hadolint_lint.txt
-					echo $ERRNO
-					exit $ERRNO
+					exit $ERR
 				'''
 			}
 			post {
