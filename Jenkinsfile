@@ -1,5 +1,4 @@
 @Library('jenkinslib') _
-
 def getEnvPort(branchName) {
     if("dev".equals(branchName)) {
         return 3001;
@@ -78,7 +77,9 @@ pipeline {
 			}
 			steps {
 				sh '''
-					hadolint Dockerfile > hadolint_lint.txt && echo hadolint_lint.txt
+					EERNO=hadolint Dockerfile | tee -a hadolint_lint.txt
+					echo hadolint_lint.txt
+					exit $ERRNO
 				'''
 			}
 			post {
