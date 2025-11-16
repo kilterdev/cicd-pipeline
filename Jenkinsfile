@@ -8,9 +8,7 @@ def getEnvPort(branchName) {
 }
 
 pipeline {
-	options {
-		skipDefaultCheckout(true)
-	}
+	
 	agent any
 	environment {
 		CI_REPOSITORY=credentials("CI_REPOSITORY")
