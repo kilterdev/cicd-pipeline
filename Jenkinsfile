@@ -77,7 +77,8 @@ pipeline {
 			}
 			steps {
 				sh '''
-					ERR=$(hadolint Dockerfile > hadolint_lint.txt)
+					hadolint Dockerfile &> hadolint_lint.txt
+					ERR=$?
 					cat hadolint_lint.txt
 					exit $ERR
 				'''
