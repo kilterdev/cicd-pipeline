@@ -77,6 +77,7 @@ pipeline {
 			}
 			steps {
 				sh '''
+					ls
 					EERNO=hadolint Dockerfile | tee -a hadolint_lint.txt
 					echo hadolint_lint.txt
 					exit $ERRNO
