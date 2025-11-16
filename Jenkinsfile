@@ -77,9 +77,7 @@ pipeline {
 			}
 			steps {
 				sh '''
-					hadolint Dockerfile 
-					ERR=$?
-					exit $ERR
+					hadolint Dockerfile | tee hadolint_lint.txt; exit ${PIPESTATUS[0]}
 				'''
 			}
 			post {
