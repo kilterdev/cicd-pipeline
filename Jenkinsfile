@@ -98,12 +98,12 @@ pipeline {
 		stage('Scan Vulnerabilities') {
 			agent {
 				docker {
-					image 'aquasec/latest-arm64'
+					image 'aquasec/latest'
 				}
 			}
 			steps {
 				script {
-					def trivyOutput = sh(script: "trivy image -offline-scan --severity HIGH,CRITICAL $IMAGE_NAME:tested", returnStdout: true).trim()
+					def trivyOutput = sh(script: "trivy image --offline-scan --severity HIGH,CRITICAL $IMAGE_NAME:tested", returnStdout: true).trim()
 					println trivyOutput
 				}
 			}
