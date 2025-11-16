@@ -103,7 +103,7 @@ pipeline {
 			}
 			steps {
 				script {
-					def trivyOutput = sh(script: "trivy image $IMAGE_NAME:tested", returnStdout: true).trim()
+					def trivyOutput = sh(script: "trivy image --severity HIGH,CRITICAL $IMAGE_NAME:tested", returnStdout: true).trim()
 					println trivyOutput
 				}
 			}
