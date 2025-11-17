@@ -101,6 +101,11 @@ pipeline {
 					docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --db-repository docker.io/aquasec/trivy-db -s HIGH,CRITICAL $IMAGE_NAME:tested > trivy_report.txt
 				'''
 			}
+			post {
+				always {
+					archiveArtifacts 'trivy_report.txt'
+				}
+			}
 		}
 
 		stage('Test Container') {
