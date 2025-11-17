@@ -104,7 +104,7 @@ pipeline {
 			steps {
 
 				script {
-					def trivyOutput = sh(script: "trivy image -s HIGH,CRITICAL $IMAGE_NAME:tested", returnStdout: true).trim()
+					def trivyOutput = sh(script: "trivy image --db-repository docker.io/aquasec/trivy-db -s HIGH,CRITICAL $IMAGE_NAME:tested", returnStdout: true).trim()
 					println trivyOutput
 				}
 			}
