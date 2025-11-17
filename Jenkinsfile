@@ -1,4 +1,5 @@
 @Library('jenkinslib') _
+
 def getEnvPort(branchName) {
     if("dev".equals(branchName)) {
         return 3001;
@@ -7,13 +8,22 @@ def getEnvPort(branchName) {
     }
 }
 
+def getBranchName() {
+	if ("$CUSTOM_BRANCH".isEmpty()) {
+		return "${env.BRANCH_NAME}";
+	else {
+		return "$CUSTOM_BRANCH";
+	}
+}
+
 pipeline {
 	
 	agent any
 	environment {
+		BRANCH_NAME=getBranchName()
 		CI_REPOSITORY=credentials("CI_REPOSITORY")
 		CI_REPOSITORY_NAMESPACE=credentials("CI_REPOSITORY_NAMESPACE")
-		CI_IMAGE_NAME="node${env.BRANCH_NAME}"
+		CI_IMAGE_NAME="node${BRANCH_NAME}"
 		CI_REPOSITORY_TOKEN=credentials("CI_REPOSITORY_TOKEN")
 		CI_REPOSITORY_USER=credentials("CI_REPOSITORY_USER")
 
@@ -23,7 +33,7 @@ pipeline {
 
 		TEST_PORT=9005
 
-		HOST_PORT=getEnvPort(env.BRANCH_NAME)
+		HOST_PORT=getEnvPort(BRANCH_NAME)
 		CONTAINER_PORT=3000
 	}
 
