@@ -96,17 +96,10 @@ pipeline {
 		}
 
 		stage('Scan Vulnerabilities') {
-			agent {
-				docker {
-					image 'aquasec/trivy:canary'
-				}
-			}
 			steps {
-
-				script {
-					def trivyOutput = sh(script: "trivy image --db-repository docker.io/aquasec/trivy-db -s HIGH,CRITICAL $IMAGE_NAME:tested", returnStdout: true).trim()
-					println trivyOutput
-				}
+				sh '''
+					docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --db-repository docker.io/aquasec/trivy-db -s HIGH,CRITICAL $IMAGE_NAME:tested > trivy_report.txt
+				'''
 			}
 		}
 
