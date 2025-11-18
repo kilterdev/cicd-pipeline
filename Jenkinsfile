@@ -11,6 +11,7 @@ def getEnvPort(branchName) {
 def getBranchName() {
 	if ("$CUSTOM_BRANCH".isEmpty()) {
 		return "${env.BRANCH_NAME}";
+	}
 	else {
 		return "$CUSTOM_BRANCH";
 	}
