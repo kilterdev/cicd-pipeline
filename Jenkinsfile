@@ -41,6 +41,7 @@ pipeline {
 		stage('Use library') {
 			steps {
 				script {
+					echo "${params.CUSTOM_BRANCH}"
 					helloWorld(dayOfWeek:"Thu",name:"kilterdev")
 				}
 			}
