@@ -10,7 +10,7 @@ def getEnvPort(branchName) {
 
 def getBranchName() {
 	if (params.CUSTOM_BRANCH) {
-		return "$CUSTOM_BRANCH";
+		return "${params.CUSTOM_BRANCH}";
 	}
 	else {
 		return "${env.BRANCH_NAME}";
@@ -43,6 +43,8 @@ pipeline {
 			steps {
 				script {
 					echo "${params.CUSTOM_BRANCH}"
+					echo "${BRANCH_NAME}"
+					echo "$HOST_PORT"
 					helloWorld(dayOfWeek:"Thu",name:"kilterdev")
 				}
 			}
