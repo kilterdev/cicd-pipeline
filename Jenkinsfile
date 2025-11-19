@@ -9,11 +9,11 @@ def getEnvPort(branchName) {
 }
 
 def getBranchName() {
-	if ("$CUSTOM_BRANCH".isEmpty()) {
-		return "${env.BRANCH_NAME}";
+	if (params.CUSTOM_BRANCH) {
+		return "$CUSTOM_BRANCH";
 	}
 	else {
-		return "$CUSTOM_BRANCH";
+		return "${env.BRANCH_NAME}";
 	}
 }
 
