@@ -14,11 +14,15 @@ def getEnvPort(branchName) {
   }
 }
 
+def getBranchName() {
+	return (params.BRANCH_NAME) ? "${params.BRANCH_NAME}" : "${env.BRANCH_NAME}";
+}
+
 pipeline {
 	
 	agent any
 	environment {
-		BRANCH_NAME = (("${params.BRANCH_NAME}") ? "${params.BRANCH_NAME}" : "${env.BRANCH_NAME}")
+		BRANCH_NAME = getBranchName()
 		CI_REPOSITORY=credentials("CI_REPOSITORY")
 		CI_REPOSITORY_NAMESPACE=credentials("CI_REPOSITORY_NAMESPACE")
 		CI_IMAGE_NAME="node${BRANCH_NAME}"
