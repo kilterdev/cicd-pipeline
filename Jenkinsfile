@@ -1,13 +1,16 @@
 @Library('jenkinslib') _
 
-branchMap = [ "dev": 3001,
+branchMap = [
+	"dev": 3001,
 	"main": 3000,
 ]
 DEFAULT_PORT = 5000
 
 def getEnvPort(String branchName) {
-  if (branchMap.containsKey($branchName)) {
-    return branchMap[$branchName];
+	echo "$branchName"
+	echo "$branchMap"
+  if (branchMap.containsKey(branchName)) {
+    return branchMap[branchName];
   } else {
     return DEFAULT_PORT;
   }
