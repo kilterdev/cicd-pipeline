@@ -7,8 +7,6 @@ branchMap = [
 DEFAULT_PORT = 5000
 
 def getEnvPort(String branchName) {
-	echo "$branchName"
-	echo "$branchMap"
   if (branchMap.containsKey(branchName)) {
     return branchMap[branchName];
   } else {
@@ -21,24 +19,35 @@ def getBranchName() {
 }
 
 pipeline {
-	
+	/* Specifying that following pipeline will be run on any available agent */
 	agent any
+
+	/* Setting up environment variables that will be available throughout the pipeline */
 	environment {
-		BRANCH_NAME = getBranchName()
+
+		/* Using jenkins credentials for secrets
+		 * these will be masked (depending on settings and not seen in pipeline logs
+		 */
 		CI_REPOSITORY=credentials("CI_REPOSITORY")
 		CI_REPOSITORY_NAMESPACE=credentials("CI_REPOSITORY_NAMESPACE")
-		CI_IMAGE_NAME="node${BRANCH_NAME}"
 		CI_REPOSITORY_TOKEN=credentials("CI_REPOSITORY_TOKEN")
 		CI_REPOSITORY_USER=credentials("CI_REPOSITORY_USER")
 
+		/* Deployment shorthand variables */
+		BRANCH_NAME = getBranchName()
+
+		// Name of the image will be suffixed with branch name
+		CI_IMAGE_NAME="node${BRANCH_NAME}" 
 		IMAGE_RELEASE_TAG="v1.0"
+		// Complete local image name without remote repo name
 		IMAGE_NAME="$CI_REPOSITORY_NAMESPACE/$CI_IMAGE_NAME"
+		// Name of the image including image tag
 		IMAGE_TAGGED_NAME="$IMAGE_NAME:$IMAGE_RELEASE_TAG"
 
-		TEST_PORT=9005
+		TEST_PORT=9005 // Host Port for testing container
 
-		HOST_PORT=getEnvPort("$BRANCH_NAME")
-		CONTAINER_PORT=3000
+		HOST_PORT=getEnvPort("$BRANCH_NAME") // Set a host port for deployment
+		CONTAINER_PORT=3000 // Internal container port
 	}
 
 	stages {
