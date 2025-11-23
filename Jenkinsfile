@@ -4,6 +4,7 @@ branchMap = [
 	"dev": 3001,
 	"main": 3000,
 ]
+
 DEFAULT_PORT = 5000
 
 def getEnvPort(String branchName) {
