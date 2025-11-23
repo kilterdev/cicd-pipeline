@@ -5,7 +5,7 @@ branchMap = [ "dev": 3001,
 ]
 DEFAULT_PORT = 5000
 
-getEnvPort(branchName) {
+def getEnvPort(branchName) {
   if (branchMap.containsKey(branchName)) {
     return branchMap[branchName];
   } else {
