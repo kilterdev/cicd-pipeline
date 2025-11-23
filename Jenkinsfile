@@ -5,9 +5,9 @@ branchMap = [ "dev": 3001,
 ]
 DEFAULT_PORT = 5000
 
-def getEnvPort(branchName) {
-  if (branchMap.containsKey(branchName)) {
-    return branchMap[branchName];
+def getEnvPort(String branchName) {
+  if (branchMap.containsKey($branchName)) {
+    return branchMap[$branchName];
   } else {
     return DEFAULT_PORT;
   }
@@ -42,11 +42,9 @@ pipeline {
 		stage('Use library') {
 			steps {
 				script {
-					var = branchMap.containsKey(BRANCH_NAME)
 					echo "${params.CUSTOM_BRANCH}"
 					echo "${BRANCH_NAME}"
 					echo "$HOST_PORT"
-					echo "$var"
 					helloWorld(dayOfWeek:"Thu",name:"kilterdev")
 				}
 			}
