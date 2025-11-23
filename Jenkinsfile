@@ -18,7 +18,7 @@ pipeline {
 	
 	agent any
 	environment {
-		BRANCH_NAME= (params.BRANCH_NAME) ? "${params.BRANCH_NAME}" : "${env.BRANCH_NAME}"
+		BRANCH_NAME = (("${params.BRANCH_NAME}") ? "${params.BRANCH_NAME}" : "${env.BRANCH_NAME}")
 		CI_REPOSITORY=credentials("CI_REPOSITORY")
 		CI_REPOSITORY_NAMESPACE=credentials("CI_REPOSITORY_NAMESPACE")
 		CI_IMAGE_NAME="node${BRANCH_NAME}"
