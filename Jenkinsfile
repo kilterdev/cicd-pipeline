@@ -42,7 +42,7 @@ pipeline {
 		stage('Use library') {
 			steps {
 				script {
-					var = branchMap.containsKey($branchName)
+					var = branchMap.containsKey(BRANCH_NAME)
 					echo "${params.CUSTOM_BRANCH}"
 					echo "${BRANCH_NAME}"
 					echo "$HOST_PORT"
