@@ -10,7 +10,7 @@ def getEnvPort(branchName) {
   if (branchMap.containsKey(branchName)) {
     return branchMap[branchName];
   } else {
-    return $DEFAULT_PORT;
+    return DEFAULT_PORT;
   }
 }
 
