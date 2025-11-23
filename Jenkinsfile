@@ -1,27 +1,24 @@
 @Library('jenkinslib') _
 
-def getEnvPort(branchName) {
-    if("dev".equals(branchName)) {
-        return 3001;
-    } else if ("main".equals(branchName)) {
-        return 3000;
-    }
-}
+branchMap = [
+	"dev": 3001,
+	"main": 3000,
+]
+DEFAULT_PORT = 5000
 
-def getBranchName() {
-	if (params.CUSTOM_BRANCH) {
-		return "${params.CUSTOM_BRANCH}";
-	}
-	else {
-		return "${env.BRANCH_NAME}";
-	}
+def getEnvPort(branchName) {
+  if (branchMap.containsKey(branchName)) {
+    return branchMap[branchName];
+  } else {
+    return $DEFAULT_PORT;
+  }
 }
 
 pipeline {
 	
 	agent any
 	environment {
-		BRANCH_NAME=getBranchName()
+		BRANCH_NAME= (params.BRANCH_NAME) ? "${params.BRANCH_NAME}" : "${env.BRANCH_NAME}"
 		CI_REPOSITORY=credentials("CI_REPOSITORY")
 		CI_REPOSITORY_NAMESPACE=credentials("CI_REPOSITORY_NAMESPACE")
 		CI_IMAGE_NAME="node${BRANCH_NAME}"
