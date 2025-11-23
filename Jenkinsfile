@@ -1,12 +1,11 @@
 @Library('jenkinslib') _
 
-branchMap = [
-	"dev": 3001,
+branchMap = [ "dev": 3001,
 	"main": 3000,
 ]
 DEFAULT_PORT = 5000
 
-def getEnvPort(branchName) {
+getEnvPort(branchName) {
   if (branchMap.containsKey(branchName)) {
     return branchMap[branchName];
   } else {
@@ -46,6 +45,7 @@ pipeline {
 					echo "${params.CUSTOM_BRANCH}"
 					echo "${BRANCH_NAME}"
 					echo "$HOST_PORT"
+					echo branchMap.containsKey(branchName)
 					helloWorld(dayOfWeek:"Thu",name:"kilterdev")
 				}
 			}
@@ -61,12 +61,18 @@ pipeline {
 			}
 		}
 
+		/* Can be used to perform "manual" checkout when there is need to do so.
+		 * Usually Jenkins performs automatic checkout where needed.
+		 * Disabling this feature in favor of manual checkout would be a bad idea.
+		 * I.e. when you use agents, jenkins will always automatically perform a checkout of sources. But when you disable this feature, you will need to insert a checkout step everywhere needed, or there would be a need to configure checkout globally with a manual strategy which is redundant and dumb
+		 ********************************
 		stage('Checkout') {
 			steps {
 				echo "Checkout SCM"
 				checkout scm
 			}
 		}
+		*/
 
 		stage('Build App') {
 			steps {
