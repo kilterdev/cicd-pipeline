@@ -35,7 +35,7 @@ pipeline {
 
 		TEST_PORT=9005
 
-		HOST_PORT=getEnvPort(BRANCH_NAME)
+		HOST_PORT=getEnvPort($BRANCH_NAME)
 		CONTAINER_PORT=3000
 	}
 
