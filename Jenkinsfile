@@ -140,7 +140,7 @@ pipeline {
 						--exit-code 1 \
 						--db-repository docker.io/aquasec/trivy-db \
 						-s HIGH,CRITICAL \
-						-f json -o trivy_report.json
+						-f json -o trivy_report.json \
 						$IMAGE_NAME:tested
 				'''
 				/*
