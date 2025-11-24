@@ -129,14 +129,29 @@ pipeline {
 		}
 
 		stage('Scan Vulnerabilities') {
+			agent {
+				docker {
+					image 'aquasec/trivy'
+				}
+			}
 			steps {
 				sh '''
-					docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --db-repository docker.io/aquasec/trivy-db -s HIGH,CRITICAL $IMAGE_NAME:tested > trivy_report.txt
+					trivy image \
+						--exit-code 1 \
+						--db-repository docker.io/aquasec/trivy-db \
+						-s HIGH,CRITICAL \
+						-f json -o trivy_report.json
+						$IMAGE_NAME:tested
 				'''
+				/*
+				sh '''
+					docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --exit-code 1 --db-repository docker.io/aquasec/trivy-db -s HIGH,CRITICAL $IMAGE_NAME:tested > trivy_report.txt
+				'''
+				*/
 			}
 			post {
 				always {
-					archiveArtifacts 'trivy_report.txt'
+					archiveArtifacts 'trivy_report.json'
 				}
 			}
 		}
