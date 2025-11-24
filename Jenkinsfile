@@ -143,6 +143,14 @@ pipeline {
 						-f json -o trivy_report.json \
 						$IMAGE_NAME:tested
 				'''
+				sh '''
+					trivy report \
+						-f template \
+						--template @junit.tpl \
+						-i trivy-report.json \
+						-o trivy-report.xml
+				'''
+				junit 'trivy-report.xml'
 				/*
 				sh '''
 					docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --exit-code 1 --db-repository docker.io/aquasec/trivy-db -s HIGH,CRITICAL $IMAGE_NAME:tested > trivy_report.txt
