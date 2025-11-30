@@ -34,35 +34,19 @@ pipeline {
 		CI_REPOSITORY_TOKEN=credentials("CI_REPOSITORY_TOKEN")
 		CI_REPOSITORY_USER=credentials("CI_REPOSITORY_USER")
 
-		/* Deployment shorthand variables */
 		BRANCH_NAME = getBranchName()
 
-		// Name of the image will be suffixed with branch name
-		CI_IMAGE_NAME="node${BRANCH_NAME}" 
-		IMAGE_RELEASE_TAG="v1.0"
-		// Complete local image name without remote repo name
-		IMAGE_NAME="$CI_REPOSITORY_NAMESPACE/$CI_IMAGE_NAME"
-		// Name of the image including image tag
-		IMAGE_TAGGED_NAME="$IMAGE_NAME:$IMAGE_RELEASE_TAG"
+		// Image tags
+		IMAGE_NAME="$CI_REPOSITORY_NAMESPACE/node${BRANCH_NAME}"
+		IMAGE_RELEASE_TAG = null
+		IMAGE_TAGGED_NAME = null
 
-		TEST_PORT=9005 // Host Port for testing container
-
-		HOST_PORT=getEnvPort("$BRANCH_NAME") // Set a host port for deployment
-		CONTAINER_PORT=3000 // Internal container port
+		TEST_PORT = 9005 // Host Port for testing container
+		HOST_PORT = getEnvPort("$BRANCH_NAME") // Set a host port for deployment
+		CONTAINER_PORT = 3000 // Internal container port
 	}
 
 	stages {
-		stage('Use library') {
-			steps {
-				script {
-					echo "${params.CUSTOM_BRANCH}"
-					echo "${BRANCH_NAME}"
-					echo "$HOST_PORT"
-					helloWorld(dayOfWeek:"Thu",name:"kilterdev")
-				}
-			}
-		}
-
 		stage('Setup Environment') {
 			steps {
 				echo "Setup environment"
@@ -70,21 +54,19 @@ pipeline {
 					
 					echo "$CI_REPOSITORY_TOKEN" | docker login -u "$CI_REPOSITORY_USER" --password-stdin
 				'''
+				env.IMAGE_RELEASE_TAG = sh(script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+				env.IMAGE_TAGGED_NAME = "${env.IMAGE_NAME}:${env.IMAGE_RELEASE_TAG}"
 			}
 		}
 
-		/* Can be used to perform "manual" checkout when there is need to do so.
-		 * Usually Jenkins performs automatic checkout where needed.
-		 * Disabling this feature in favor of manual checkout would be a bad idea.
-		 * I.e. when you use agents, jenkins will always automatically perform a checkout of sources. But when you disable this feature, you will need to insert a checkout step everywhere needed, or there would be a need to configure checkout globally with a manual strategy which is redundant and dumb
-		 ********************************
-		stage('Checkout') {
+		stage('Use library') {
 			steps {
-				echo "Checkout SCM"
-				checkout scm
+				script {
+					echo "${env.IMAGE_TAGGED_NAME}"
+					helloWorld(dayOfWeek:"Thu",name:"kilterdev")
+				}
 			}
 		}
-		*/
 
 		stage('Build App') {
 			steps {
