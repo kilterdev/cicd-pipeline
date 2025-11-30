@@ -118,7 +118,7 @@ pipeline {
 			}
 			steps {
 				sh '''
-					aquasec/trivy image --exit-code 1 \
+					trivy image --exit-code 1 \
 						--ignore-unfixed \
 						--exit-code 1 \
 						--db-repository docker.io/aquasec/trivy-db \
