@@ -54,8 +54,10 @@ pipeline {
 					
 					echo "$CI_REPOSITORY_TOKEN" | docker login -u "$CI_REPOSITORY_USER" --password-stdin
 				'''
-				env.IMAGE_RELEASE_TAG = sh(script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
-				env.IMAGE_TAGGED_NAME = "${env.IMAGE_NAME}:${env.IMAGE_RELEASE_TAG}"
+				script {
+					env.IMAGE_RELEASE_TAG = sh(script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+					env.IMAGE_TAGGED_NAME = "${env.IMAGE_NAME}:${env.IMAGE_RELEASE_TAG}"
+				}
 			}
 		}
 
