@@ -112,7 +112,7 @@ pipeline {
 		stage('Scan Vulnerabilities') {
 			steps {
 				sh '''
-					trivy image --exit-code 1 \
+					docker run --rm aquasec/trivy image --exit-code 1 \
 						--ignore-unfixed \
 						--exit-code 1 \
 						--db-repository docker.io/aquasec/trivy-db \
