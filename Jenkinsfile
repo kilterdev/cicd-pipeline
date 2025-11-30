@@ -110,43 +110,20 @@ pipeline {
 		}
 
 		stage('Scan Vulnerabilities') {
-			agent {
-				docker {
-					image 'aquasec/trivy'
-				}
-			}
 			steps {
 				sh '''
-					trivy image \
-						--exit-code 1 \
+					trivy image --exit-code 1 \
 						--ignore-unfixed \
+						--exit-code 1 \
 						--db-repository docker.io/aquasec/trivy-db \
 						-s HIGH,CRITICAL \
-						-f json -o trivy-report.json \
+						--format template --template "@contrib/html.tpl" -o trivy-report.html \
 						$IMAGE_NAME:tested
 				'''
-				sh '''
-					trivy report \
-						-f template \
-						--template @junit.tpl \
-						-i trivy-report.json \
-						-o trivy-report.xml
-				'''
-					junit 'trivy-report.xml'
-				/*
-				sh '''
-					docker run \
-						--rm -v /var/run/docker.sock:/var/run/docker.sock \
-						aquasec/trivy image --exit-code 1 \
-						--db-repository docker.io/aquasec/trivy-db \
-						-s HIGH,CRITICAL \
-						$IMAGE_NAME:tested > trivy_report.txt
-				'''
-				*/
 			}
 			post {
 				always {
-					archiveArtifacts 'trivy-report.xml'
+					archiveArtifacts artifacts: 'trivy-report.html', fingerprint: true
 				}
 			}
 		}
