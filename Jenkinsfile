@@ -112,13 +112,14 @@ pipeline {
 		stage('Scan Vulnerabilities') {
 			steps {
 				sh '''
-					docker run --rm aquasec/trivy image --exit-code 1 \
-						--ignore-unfixed \
-						--exit-code 1 \
-						--db-repository docker.io/aquasec/trivy-db \
-						-s HIGH,CRITICAL \
-						--format template --template "@contrib/html.tpl" -o trivy-report.html \
-						$IMAGE_NAME:tested
+					docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+						aquasec/trivy image --exit-code 1 \
+							--ignore-unfixed \
+							--exit-code 1 \
+							--db-repository docker.io/aquasec/trivy-db \
+							-s HIGH,CRITICAL \
+							--format template --template "@contrib/html.tpl" -o trivy-report.html \
+							$IMAGE_NAME:tested
 				'''
 			}
 			post {
