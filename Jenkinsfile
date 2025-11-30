@@ -38,12 +38,13 @@ pipeline {
 
 		// Image tags
 		IMAGE_NAME="$CI_REPOSITORY_NAMESPACE/node${BRANCH_NAME}"
-		IMAGE_RELEASE_TAG = null
-		IMAGE_TAGGED_NAME = null
+		env.IMAGE_RELEASE_TAG = sh(script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+		env.IMAGE_TAGGED_NAME = "${env.IMAGE_NAME}:${env.IMAGE_RELEASE_TAG}"
 
 		TEST_PORT = 9005 // Host Port for testing container
 		HOST_PORT = getEnvPort("$BRANCH_NAME") // Set a host port for deployment
 		CONTAINER_PORT = 3000 // Internal container port
+
 	}
 
 	stages {
@@ -54,10 +55,6 @@ pipeline {
 					
 					echo "$CI_REPOSITORY_TOKEN" | docker login -u "$CI_REPOSITORY_USER" --password-stdin
 				'''
-				script {
-					env.IMAGE_RELEASE_TAG = sh(script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
-					env.IMAGE_TAGGED_NAME = "${env.IMAGE_NAME}:${env.IMAGE_RELEASE_TAG}"
-				}
 			}
 		}
 
