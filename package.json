@@ -6,7 +6,6 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-scripts": "5.0.1",
-	"nth-check": "^2.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -15,8 +14,7 @@
     "eject": "react-scripts eject"
   },
   "overrides": {
-	  "glob": {
-		  "nth-check": "$nth-check"
-	  }
+	  "glob": "latest",
+	  "nth-check": "latest"
   }
 }
