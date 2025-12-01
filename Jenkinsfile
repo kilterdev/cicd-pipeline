@@ -110,12 +110,6 @@ pipeline {
 		}
 
 		stage('Scan Vulnerabilities') {
-			agent {
-				docker {
-					image 'aquasec/trivy'
-					reuseNode true
-				}
-			}
 			steps {
 				sh '''
 					trivy image --exit-code 1 \
