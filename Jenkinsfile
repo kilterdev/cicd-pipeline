@@ -115,15 +115,15 @@ pipeline {
 					trivy image --exit-code 1 \
 						--ignore-unfixed \
 						--exit-code 1 \
+						----no-progress \
 						--db-repository docker.io/aquasec/trivy-db \
 						-s HIGH,CRITICAL \
-						--format template --template "@contrib/junit.tpl" -o junit-report.html \
-						$IMAGE_NAME:tested
+						$IMAGE_NAME:tested > trivy-report.txt
 				'''
 			}
 			post {
 				always {
-					archiveArtifacts artifacts: 'junit-report.html', fingerprint: true
+					archiveArtifacts artifacts: 'trivy-report.txt', fingerprint: true
 				}
 			}
 		}
