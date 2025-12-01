@@ -113,7 +113,7 @@ pipeline {
 			agent {
 				docker {
 					image 'aquasec/trivy'
-					additionalBuildArgs '-v /var/run/docker.sock:/var/run/docker.sock'
+					reuseNode true
 				}
 			}
 			steps {
