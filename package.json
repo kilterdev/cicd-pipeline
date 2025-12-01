@@ -15,6 +15,8 @@
     "eject": "react-scripts eject"
   },
   "overrides": {
-	"nth-check": "$nth-check"
+	  "glob": {
+		  "nth-check": "$nth-check"
+	  }
   }
 }
