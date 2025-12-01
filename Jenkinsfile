@@ -141,11 +141,10 @@ pipeline {
 				sh '''
 				docker stop $(docker ps --filter "publish=$TEST_PORT" --format "{{.ID}}") || echo ""
 				docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested
-					sleep 10s
-#[ $( docker container inspect -f '{{.State.Status}}' $IMAGE_NAME:tested)" = "running" ]
+				
+				curl --connect-timeout 30 -f localhost:$TEST_PORT
 
-					curl localhost:$TEST_PORT
-					docker stop $(docker ps -q --filter ancestor=$IMAGE_NAME:tested)
+				docker stop $(docker ps -q --filter ancestor=$IMAGE_NAME:tested)
 				'''
 			}
 		}
