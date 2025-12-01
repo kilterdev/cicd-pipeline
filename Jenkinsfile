@@ -119,6 +119,13 @@ pipeline {
 						--db-repository docker.io/aquasec/trivy-db \
 						-s HIGH,CRITICAL \
 						$IMAGE_NAME:tested > trivy-report.txt
+
+						if [[ "$?" == 1 ]]; then
+							echo "Image scanning failed: Critical vulnerabilities found."
+								exit 1
+						else
+							echo "Image scanning passed or no critical vulnerabilities found."
+								fi
 				'''
 			}
 			post {
