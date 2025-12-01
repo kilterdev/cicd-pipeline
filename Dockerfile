@@ -1,4 +1,4 @@
-FROM node:20.19.5
+FROM node:latest
 WORKDIR /opt
 
 COPY . /opt
