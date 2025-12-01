@@ -117,13 +117,13 @@ pipeline {
 						--exit-code 1 \
 						--db-repository docker.io/aquasec/trivy-db \
 						-s HIGH,CRITICAL \
-						--format template --template "@contrib/html.tpl" -o trivy-report.html \
+						--format template --template "@contrib/junit.tpl" -o junit-report.html \
 						$IMAGE_NAME:tested
 				'''
 			}
 			post {
 				always {
-					archiveArtifacts artifacts: 'trivy-report.html', fingerprint: true
+					archiveArtifacts artifacts: 'junit-report.html', fingerprint: true
 				}
 			}
 		}
