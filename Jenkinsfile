@@ -38,8 +38,6 @@ pipeline {
 
 		// Image tags
 		IMAGE_NAME="$CI_REPOSITORY_NAMESPACE/node${BRANCH_NAME}"
-		IMAGE_RELEASE_TAG = sh(script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
-		IMAGE_TAGGED_NAME = "${env.IMAGE_NAME}:${env.IMAGE_RELEASE_TAG}"
 
 		TEST_PORT = 9005 // Host Port for testing container
 		HOST_PORT = getEnvPort("$BRANCH_NAME") // Set a host port for deployment
@@ -61,9 +59,6 @@ pipeline {
 		stage('Use library') {
 			steps {
 				script {
-					echo "${env.IMAGE_TAGGED_NAME}"
-					chash = sh(script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
-					echo "$chash"
 					helloWorld(dayOfWeek:"Thu",name:"kilterdev")
 				}
 			}
@@ -105,7 +100,6 @@ pipeline {
 				}
 			}
 		}
-
 		stage('Build Image') {
 			steps {
 				echo 'Building....'
@@ -157,7 +151,12 @@ pipeline {
 		}
 
 		stage('Push') {
+			environment {
+				IMAGE_TAGGED_NAME = "$IMAGE_NAME:${env.GIT_COMMIT}"
+			}
 			steps {
+				sh 'echo "Pusing image with tag: $IMAGE_TAGGED_NAME"
+
 				// Remove latest tag that is currently running as a container
 				// and tag tested image as latest
 				// Push tested version to repository
