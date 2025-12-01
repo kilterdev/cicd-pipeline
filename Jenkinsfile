@@ -70,7 +70,11 @@ pipeline {
 		stage('Build App') {
 			steps {
 				echo 'Installing deps...'
-				sh 'npm install'
+				sh '''
+					rm -rf node_modules/
+					rm -rf package-lock.json
+					npm install
+				'''
 			}
 		}
 
