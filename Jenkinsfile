@@ -115,7 +115,7 @@ pipeline {
 					trivy image --exit-code 1 \
 						--ignore-unfixed \
 						--exit-code 1 \
-						----no-progress \
+						--no-progress \
 						--db-repository docker.io/aquasec/trivy-db \
 						-s HIGH,CRITICAL \
 						$IMAGE_NAME:tested > trivy-report.txt
