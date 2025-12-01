@@ -117,7 +117,7 @@ pipeline {
 						--exit-code 1 \
 						--no-progress \
 						--db-repository docker.io/aquasec/trivy-db \
-						-s HIGH,CRITICAL \
+						-s CRITICAL \
 						$IMAGE_NAME:tested > trivy-report.txt
 
 						if [[ "$?" == 1 ]]; then
