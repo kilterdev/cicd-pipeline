@@ -155,7 +155,7 @@ pipeline {
 				IMAGE_TAGGED_NAME = "$IMAGE_NAME:${env.GIT_COMMIT}"
 			}
 			steps {
-				sh 'echo "Pusing image with tag: $IMAGE_TAGGED_NAME"
+				sh 'echo "Pusing image with tag: $IMAGE_TAGGED_NAME"'
 
 				// Remove latest tag that is currently running as a container
 				// and tag tested image as latest
