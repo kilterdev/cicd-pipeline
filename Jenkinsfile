@@ -62,6 +62,8 @@ pipeline {
 			steps {
 				script {
 					echo "${env.IMAGE_TAGGED_NAME}"
+					chash = sh(script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+					echo "$chash"
 					helloWorld(dayOfWeek:"Thu",name:"kilterdev")
 				}
 			}
@@ -126,10 +128,10 @@ pipeline {
 
 						if [[ "$?" == 1 ]]; then
 							echo "Image scanning failed: Critical vulnerabilities found."
-								exit 1
+							exit 1
 						else
 							echo "Image scanning passed or no critical vulnerabilities found."
-								fi
+						fi
 				'''
 			}
 			post {
