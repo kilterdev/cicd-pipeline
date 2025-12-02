@@ -142,12 +142,21 @@ pipeline {
 				docker stop $(docker ps --filter "publish=$TEST_PORT" --format "{{.ID}}") || echo ""
 				docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested
 				
-				curl \
-					--max-time 10 \
-					--retry 5 \
-					--retry-delay 0 \
-					--retry-max-time 40 \
-					--connect-timeout 30 -f localhost:$TEST_PORT
+				available=false
+				for $n in {1..10}; do
+					curl \
+						--max-time 10 \
+						--retry 5 \
+						--retry-delay 0 \
+						--retry-max-time 40 \
+						--connect-timeout 30 -f localhost:$TEST_PORT && available=true && break
+					sleep 3
+				done
+
+				if [[ $available = false ]]; then
+					echo "Container is not available!"
+					exit 1
+				fi
 
 				docker stop $(docker ps -q --filter ancestor=$IMAGE_NAME:tested)
 				'''
