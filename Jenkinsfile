@@ -144,7 +144,7 @@ pipeline {
 				
 				status=false
 				for _ in {1..10}; do
-					status=$(docker inspect --format='{{.State.Running}}' ${IMAGE_NAME}:tested)
+					status=$(docker inspect --format='{{.State.Status}}' ${IMAGE_NAME}:tested)
 					if [[ $status ]]; then
 						break
 					fi
