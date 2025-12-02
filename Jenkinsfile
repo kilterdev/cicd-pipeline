@@ -143,7 +143,7 @@ pipeline {
 				cid=$(docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested)
 				
 				for _ in {1..10}; do
-					status=$(docker inspect --format='{{.State.Status}}' $cid)
+					status=$(docker inspect --format='{{.State.Running}}' $cid)
 					if [[ $status ]]; then
 						break
 					fi
