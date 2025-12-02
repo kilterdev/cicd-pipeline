@@ -140,8 +140,9 @@ pipeline {
 				echo 'Testing....'
 				sh '''
 				docker stop $(docker ps --filter "publish=$TEST_PORT" --format "{{.ID}}") || echo ""
-				cid=$(docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested)
+				docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested
 				
+				cid=$(docker ps -q --filter ancestor=$IMAGE_NAME:tested)
 				for _ in {1..10}; do
 					status=$(docker inspect --format='{{.State.Running}}' $cid)
 					if [[ $status ]]; then
