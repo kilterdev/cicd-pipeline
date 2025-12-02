@@ -144,8 +144,8 @@ pipeline {
 				
 					cid=$(docker ps -q --filter ancestor=$IMAGE_NAME:tested)
 					for _ in {1..10}; do
-						status=$(docker inspect --format='{{.State.Running}}' $cid)
-						if [[ "$status" == "true" ]]; then
+						status="$(docker inspect --format='{{.State.Running}}' $cid)"
+						if [ "$status" == "true" ]; then
 							break
 						fi
 						sleep 3s
