@@ -142,7 +142,12 @@ pipeline {
 				docker stop $(docker ps --filter "publish=$TEST_PORT" --format "{{.ID}}") || echo ""
 				docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested
 				
-				curl --connect-timeout 30 -f localhost:$TEST_PORT
+				curl \
+					--max-time 10 \
+					--retry 5 \
+					--retry-delay 0 \
+					--retry-max-time 40 \
+					--connect-timeout 30 -f localhost:$TEST_PORT
 
 				docker stop $(docker ps -q --filter ancestor=$IMAGE_NAME:tested)
 				'''
