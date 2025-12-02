@@ -140,14 +140,14 @@ pipeline {
 				echo 'Testing....'
 				sh '''
 				docker stop $(docker ps --filter "publish=$TEST_PORT" --format "{{.ID}}") || echo ""
-				docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested
+				cid=$(docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested)
 				
-				status=false
 				for _ in {1..10}; do
-					status=$(docker inspect --format='{{.State.Status}}' ${IMAGE_NAME}:tested)
+					status=$(docker inspect --format='{{.State.Status}}' $cid)
 					if [[ $status ]]; then
 						break
 					fi
+					sleep 3s
 				done
 
 				// A good practice would be to introduce logic that cleans up a stuck container
