@@ -144,14 +144,15 @@ pipeline {
 				
 					cid=$(docker ps -q --filter ancestor=$IMAGE_NAME:tested)
 					for _ in {1..10}; do
-						status="$(docker inspect --format='{{.State.Running}}' $cid)"
-						if [ "$status" == "true" ]; then
+						status="$(docker inspect --format='{{.State.Health.Status}}' $cid)"
+						if [[ "$status" == "healthy" && ]]; then
 							break
 						fi
 						sleep 3s
 					done
 
-					curl -f localhost:$TEST_PORT
+					curl -f "http://localhost:$TEST_PORT"
+
 					docker stop $(docker ps -q --filter ancestor=$IMAGE_NAME:tested)
 				'''
 			}
