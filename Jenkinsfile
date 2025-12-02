@@ -139,24 +139,24 @@ pipeline {
 			steps {
 				echo 'Testing....'
 				sh '''
-				docker stop $(docker ps --filter "publish=$TEST_PORT" --format "{{.ID}}") || echo ""
-				docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested
+					docker stop $(docker ps --filter "publish=$TEST_PORT" --format "{{.ID}}") || echo ""
+					docker run -d -p $TEST_PORT:$CONTAINER_PORT $IMAGE_NAME:tested
 				
-				cid=$(docker ps -q --filter ancestor=$IMAGE_NAME:tested)
-				for _ in {1..10}; do
-					status=$(docker inspect --format='{{.State.Running}}' $cid)
-					if [[ $status ]]; then
-						break
-					fi
-					sleep 3s
-				done
+					cid=$(docker ps -q --filter ancestor=$IMAGE_NAME:tested)
+					for _ in {1..10}; do
+						status=$(docker inspect --format='{{.State.Running}}' $cid)
+						if [[ "$status" == "true" ]]; then
+							break
+						fi
+						sleep 3s
+					done
 
-				// A good practice would be to introduce logic that cleans up a stuck container
-				// so it does not drain resourses trying to restart deadly-born application
-				curl -f localhost:$TEST_PORT
+					// A good practice would be to introduce logic that cleans up a stuck container
+					// so it does not drain resourses trying to restart deadly-born application
+					curl -f localhost:$TEST_PORT
 
-				// this won't be executed unless curl has succeeded
-				docker stop $(docker ps -q --filter ancestor=$IMAGE_NAME:tested)
+					// this won't be executed unless curl has succeeded
+					docker stop $(docker ps -q --filter ancestor=$IMAGE_NAME:tested)
 				'''
 			}
 		}
