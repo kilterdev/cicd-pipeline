@@ -151,11 +151,7 @@ pipeline {
 						sleep 3s
 					done
 
-					// A good practice would be to introduce logic that cleans up a stuck container
-					// so it does not drain resourses trying to restart deadly-born application
 					curl -f localhost:$TEST_PORT
-
-					// this won't be executed unless curl has succeeded
 					docker stop $(docker ps -q --filter ancestor=$IMAGE_NAME:tested)
 				'''
 			}
